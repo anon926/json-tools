@@ -10,6 +10,8 @@ import (
 	"os/signal"
 
 	"github.com/anon926/lorca"
+
+	"github.com/anon926/json-tools/handler"
 )
 
 //go:embed ui/build
@@ -25,10 +27,11 @@ func main() {
 		_ = ui.Close()
 	}(ui)
 
-	// A simple way to know when UI is ready (uses body.onload event in JS)
-	_ = ui.Bind("start", func() {
-		log.Println("UI is ready")
-	})
+	// Bind All Handlers
+	err = bindHandler(ui)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Load HTML
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
@@ -58,4 +61,19 @@ func main() {
 	}
 
 	log.Println("exiting...")
+}
+
+func bindHandler(ui lorca.UI) error {
+	exporters := handler.GetAllExporter()
+	for _, exp := range exporters {
+		expName := exp.GetName()
+		prefix := exp.GetPrefix()
+		for _, meta := range exp.GetExports() {
+			err := ui.Bind(prefix+meta.Name, meta.Exp)
+			if err != nil {
+				return fmt.Errorf("ui bind error, handler:%s, name:%s, err: %w", expName, meta.Name, err)
+			}
+		}
+	}
+	return nil
 }
