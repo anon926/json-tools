@@ -21,6 +21,11 @@ func GetAllExporter() map[string]Exporter {
 	return registeredExporter
 }
 
+// GetExporter get registered exporter by key
+func GetExporter(key string) Exporter {
+	return registeredExporter[key]
+}
+
 type CommonHandler struct {
 	name    string
 	prefix  string
