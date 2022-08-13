@@ -1,29 +1,61 @@
 package main
 
 import (
+	"embed"
+	"fmt"
 	"log"
-	"net/url"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
 
 	"github.com/anon926/lorca"
 )
 
+//go:embed ui/build
+var fs embed.FS
+
 func main() {
 	// Create UI with basic HTML passed via data URI
-	ui, err := lorca.New("data:text/html,"+url.PathEscape(`
-	<html>
-		<head><title>Hello</title></head>
-		<body><h1>Hello, world!</h1></body>
-	</html>
-	`), "", 480, 320)
+	ui, err := lorca.New("", "", 1024, 768)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer func(ui lorca.UI) {
-		err := ui.Close()
+		_ = ui.Close()
+	}(ui)
+
+	// A simple way to know when UI is ready (uses body.onload event in JS)
+	_ = ui.Bind("start", func() {
+		log.Println("UI is ready")
+	})
+
+	// Load HTML
+	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(ln net.Listener) {
+		_ = ln.Close()
+	}(ln)
+	go func() {
+		err := http.Serve(ln, http.FileServer(http.FS(fs)))
 		if err != nil {
 			log.Fatal(err)
 		}
-	}(ui)
-	// Wait until UI window is closed
-	<-ui.Done()
+	}()
+	err = ui.Load(fmt.Sprintf("http://%s/ui/build", ln.Addr()))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Wait until the interrupt signal arrives or browser window is closed
+	signalChan := make(chan os.Signal)
+	signal.Notify(signalChan, os.Interrupt)
+	select {
+	case <-signalChan:
+	case <-ui.Done():
+	}
+
+	log.Println("exiting...")
 }
