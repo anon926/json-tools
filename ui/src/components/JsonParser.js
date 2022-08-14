@@ -66,9 +66,9 @@ export default function JsonParser(props) {
                 </div>
             </Switch.Group>
         </div>
-        <div className="flex-1 overflow-hidden rounded-xl m-2 p-0 bg-blue-100 text-left font-mono">
+        <div className="flex-1 overflow-hidden rounded-xl m-2 p-0 bg-blue-100 text-left text-sm font-mono">
             <div className="h-full overflow-auto p-4">
-                <ReactJson src={jsonObject} style={style}/>
+                <ReactJson src={jsonObject} style={style} collapsed={1} indentWidth={2} collapseStringsAfterLength={32} quotesOnKeys={false} displayDataTypes={false}/>
             </div>
         </div>
         <Transition appear show={isEditorOpen} as={Fragment}>
