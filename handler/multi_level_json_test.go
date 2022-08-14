@@ -17,22 +17,22 @@ func TestMultiLevelJsonHandler_RecursiveParse_Basic(t *testing.T) {
 	assert.Equal(t, "abc", rst)
 
 	rst = mljHandler.RecursiveParse("\"123.4\"")
-	assert.Equal(t, 123.4, rst)
+	assert.Equal(t, "123.4", rst)
 
 	rst = mljHandler.RecursiveParse("123")
-	assert.Equal(t, int64(123), rst)
+	assert.Equal(t, "123", rst)
 
 	rst = mljHandler.RecursiveParse("123.456")
-	assert.Equal(t, 123.456, rst)
+	assert.Equal(t, "123.456", rst)
 
 	rst = mljHandler.RecursiveParse("9111172036812345678")
-	assert.Equal(t, int64(9111172036812345678), rst)
+	assert.Equal(t, "9111172036812345678", rst)
 
 	rst = mljHandler.RecursiveParse("true")
-	assert.Equal(t, true, rst)
+	assert.Equal(t, "true", rst)
 
 	rst = mljHandler.RecursiveParse("null")
-	assert.Equal(t, nil, rst)
+	assert.Equal(t, "null", rst)
 }
 
 func TestMultiLevelJsonHandler_RecursiveParse_Array(t *testing.T) {
@@ -81,7 +81,7 @@ func TestMultiLevelJsonHandler_RecursiveParse_Array(t *testing.T) {
 		]
 	`
 	exp := []interface{}{
-		int64(1), 2.2, nil, true, "q", 123.456,
+		int64(1), 2.2, nil, true, "q", "123.456",
 		[]interface{}{
 			1.1, "q", true, []interface{}{3.3}, map[string]interface{}{"a": "z"},
 		},

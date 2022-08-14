@@ -48,7 +48,21 @@ func recursiveParseJson(input any, level int) any {
 		if err != nil {
 			return inType
 		}
-		return recursiveParseJson(val, level+1)
+		// only array, object and string need parse
+		needParse := false
+		switch val.(type) {
+		case []any:
+			needParse = true
+		case map[string]any:
+			needParse = true
+		case string:
+			needParse = true
+		}
+		if needParse {
+			return recursiveParseJson(val, level+1)
+		} else {
+			return inType
+		}
 	case int64:
 		return inType
 	case float64:

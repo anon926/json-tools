@@ -46,6 +46,12 @@ func TestUnmarshalString(t *testing.T) {
 	assert.Equal(t, 123.456, r.(map[string]any)["key2"])
 }
 
+func TestUnmarshalStringErr(t *testing.T) {
+	var r any
+	err := UnmarshalString("[\"a1\",\"a2\"][\"b1\"]", &r)
+	assert.NotNil(t, err)
+}
+
 func TestUnmarshalType(t *testing.T) {
 	ty := func(buf string) string {
 		var v any
