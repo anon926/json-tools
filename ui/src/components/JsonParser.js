@@ -10,8 +10,6 @@ export default function JsonParser(props) {
     const [jsonText, setJsonText] = useState("")
     const [jsonObject, setJsonObject] = useState({})
 
-    const cacheKey = 'JSON_PARSER_LAST_TEXT'
-
     const style = {
         fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     }
@@ -23,7 +21,6 @@ export default function JsonParser(props) {
 
     function saveEditor() {
         setJsonText(editorText)
-        localStorage.setItem(cacheKey, editorText)
         setIsEditorOpen(false)
     }
 
@@ -31,11 +28,6 @@ export default function JsonParser(props) {
         setEditorText(jsonText)
         setIsEditorOpen(true)
     }
-
-    useEffect(() => {
-        let text = localStorage.getItem(cacheKey)
-        setJsonText(text)
-    }, [props])
 
     useEffect(() => {
         parseJson(setJsonObject, jsonText, enableRecursive)
