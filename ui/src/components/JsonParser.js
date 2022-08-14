@@ -1,6 +1,7 @@
 import {Dialog, Switch, Transition} from '@headlessui/react'
 import ReactJson from 'react-json-view'
-import {Fragment, useState} from 'react'
+import {Fragment, useEffect, useState} from 'react'
+import {parseJson} from '../service/jsonParser'
 
 export default function JsonParser() {
     const [isEditorOpen, setIsEditorOpen] = useState(false)
@@ -16,7 +17,6 @@ export default function JsonParser() {
 
     function saveEditor() {
         setJsonText(editorText)
-        setJsonObject(JSON.parse(editorText))
         setIsEditorOpen(false)
     }
 
@@ -24,6 +24,10 @@ export default function JsonParser() {
         setEditorText(jsonText)
         setIsEditorOpen(true)
     }
+
+    useEffect(() => {
+        parseJson(setJsonObject, jsonText, enableRecursive)
+    }, [jsonText, enableRecursive])
 
     return (<div className="flex-1 flex flex-col">
         <div className="flex p-2 justify-start">
