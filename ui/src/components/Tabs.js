@@ -31,8 +31,8 @@ const tabList = [
 ]
 
 export default function Tabs() {
-    return (<div className="min-h-full overflow-hidden flex flex-col">
-        <div className="container mx-auto px-4 py-5 flex-1 flex flex-col">
+    return (<div className="h-screen overflow-hidden flex flex-col">
+        <div className="container h-screen mx-auto px-4 py-5 flex-1 flex flex-col">
             <Tab.Group>
                 <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
                     {tabList.map((t, idx) => (<Tab
@@ -42,10 +42,10 @@ export default function Tabs() {
                         {t.title}
                     </Tab>))}
                 </Tab.List>
-                <Tab.Panels className="mt-3 flex-1 flex flex-col">
+                <Tab.Panels className="mt-3 flex-1 flex flex-col overflow-hidden">
                     {tabList.map((t, idx) => (<Tab.Panel
                         key={idx}
-                        className={classNames('rounded-xl bg-white p-3 flex-1 flex flex-col', 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2')}
+                        className={classNames('rounded-xl bg-white p-3 flex-1 flex flex-col overflow-hidden', 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2')}
                     >
                         {t.component}
                     </Tab.Panel>))}

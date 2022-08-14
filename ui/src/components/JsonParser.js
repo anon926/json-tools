@@ -10,6 +10,10 @@ export default function JsonParser() {
     const [jsonText, setJsonText] = useState("")
     const [jsonObject, setJsonObject] = useState({})
 
+    const style = {
+        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    }
+
     function closeEditor() {
         setEditorText(jsonText)
         setIsEditorOpen(false)
@@ -29,7 +33,7 @@ export default function JsonParser() {
         parseJson(setJsonObject, jsonText, enableRecursive)
     }, [jsonText, enableRecursive])
 
-    return (<div className="flex-1 flex flex-col">
+    return (<div className="flex-1 flex flex-col overflow-hidden">
         <div className="flex p-2 justify-start">
             <button
                 type="button"
@@ -54,8 +58,10 @@ export default function JsonParser() {
                 </div>
             </Switch.Group>
         </div>
-        <div className="flex-1 rounded-xl m-2 p-4 bg-blue-100 text-left">
-            <ReactJson src={jsonObject}/>
+        <div className="flex-1 overflow-hidden rounded-xl m-2 p-0 bg-blue-100 text-left font-mono">
+            <div className="h-full overflow-auto p-4">
+                <ReactJson src={jsonObject} style={style}/>
+            </div>
         </div>
         <Transition appear show={isEditorOpen} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={() => {
