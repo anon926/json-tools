@@ -1,14 +1,10 @@
 import './App.css';
-import ReactJson from 'react-json-view';
-
-const jsonObj = {
-    "foo": 123
-}
+import Tabs from './components/Tabs'
 
 function App() {
     return (
-        <div className="App">
-            <ReactJson src={jsonObj}/>
+        <div className="App h-full bg-gradient-to-r from-cyan-500 to-blue-500">
+            <Tabs></Tabs>
         </div>
     );
 }
