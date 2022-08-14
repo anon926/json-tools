@@ -3,12 +3,14 @@ import ReactJson from 'react-json-view'
 import {Fragment, useEffect, useState} from 'react'
 import {parseJson} from '../service/jsonParser'
 
-export default function JsonParser() {
+export default function JsonParser(props) {
     const [isEditorOpen, setIsEditorOpen] = useState(false)
     const [enableRecursive, setEnableRecursive] = useState(false)
     const [editorText, setEditorText] = useState("")
     const [jsonText, setJsonText] = useState("")
     const [jsonObject, setJsonObject] = useState({})
+
+    const cacheKey = 'JSON_PARSER_LAST_TEXT'
 
     const style = {
         fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
@@ -21,6 +23,7 @@ export default function JsonParser() {
 
     function saveEditor() {
         setJsonText(editorText)
+        localStorage.setItem(cacheKey, editorText)
         setIsEditorOpen(false)
     }
 
@@ -28,6 +31,11 @@ export default function JsonParser() {
         setEditorText(jsonText)
         setIsEditorOpen(true)
     }
+
+    useEffect(() => {
+        let text = localStorage.getItem(cacheKey)
+        setJsonText(text)
+    }, [props])
 
     useEffect(() => {
         parseJson(setJsonObject, jsonText, enableRecursive)
