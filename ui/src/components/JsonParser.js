@@ -2,24 +2,62 @@ import { Dialog, Switch, Transition } from '@headlessui/react'
 import ReactJson from 'react-json-view'
 import { Fragment, Suspense } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { editorOpenState, editorTextState, jsonTextState, parseRecursiveState } from '../state/atom'
+import { editorOpenState, editorTextState, jsonCollapsedState, jsonTextState, parseRecursiveState } from '../state/atom'
 import { jsonObjectSelector } from '../state/selector'
 
 function JsonViewer () {
   const style = {
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   }
+  const [jsonCollapsed] = useRecoilState(jsonCollapsedState)
   const jsonObject = useRecoilValue(jsonObjectSelector)
-
   return (
-    <ReactJson src={jsonObject} style={style} collapsed={1} indentWidth={2} collapseStringsAfterLength={32}
+    <ReactJson src={jsonObject} style={style} collapsed={jsonCollapsed ? 1 : false} indentWidth={2}
+               collapseStringsAfterLength={256}
                quotesOnKeys={false} displayDataTypes={false}/>
+  )
+}
+
+function RecursiveSwitch () {
+  const [parseRecursive, setParseRecursive] = useRecoilState(parseRecursiveState)
+  return (
+    <Switch.Group>
+      <div className="flex items-center mx-3">
+        <Switch.Label className="mr-3">Parse string</Switch.Label>
+        <Switch
+          checked={parseRecursive}
+          onChange={setParseRecursive}
+          className={`${parseRecursive ? 'bg-emerald-500' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+        >
+          <span
+            className={`${parseRecursive ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}/>
+        </Switch>
+      </div>
+    </Switch.Group>
+  )
+}
+
+function CollapsedSwitch () {
+  const [jsonCollapsed, setJsonCollapsed] = useRecoilState(jsonCollapsedState)
+  return (
+    <Switch.Group>
+      <div className="flex items-center mx-3">
+        <Switch.Label className="mr-3">Collapsed</Switch.Label>
+        <Switch
+          checked={jsonCollapsed}
+          onChange={setJsonCollapsed}
+          className={`${jsonCollapsed ? 'bg-emerald-500' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+        >
+          <span
+            className={`${jsonCollapsed ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}/>
+        </Switch>
+      </div>
+    </Switch.Group>
   )
 }
 
 export default function JsonParser (props) {
   const [isEditorOpen, setIsEditorOpen] = useRecoilState(editorOpenState)
-  const [parseRecursive, setParseRecursive] = useRecoilState(parseRecursiveState)
   const [editorText, setEditorText] = useRecoilState(editorTextState)
   const [jsonText, setJsonText] = useRecoilState(jsonTextState)
 
@@ -47,20 +85,8 @@ export default function JsonParser (props) {
       >
         Edit JSON
       </button>
-      <Switch.Group>
-        <div className="flex items-center mx-3">
-          <Switch
-            checked={parseRecursive}
-            onChange={setParseRecursive}
-            className={`${parseRecursive ? 'bg-emerald-500' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
-          >
-                          <span
-                            className={`${parseRecursive ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                          />
-          </Switch>
-          <Switch.Label className="ml-3">Parse all strings</Switch.Label>
-        </div>
-      </Switch.Group>
+      <RecursiveSwitch></RecursiveSwitch>
+      <CollapsedSwitch></CollapsedSwitch>
     </div>
     <div className="flex-1 overflow-hidden rounded-xl m-2 p-0 bg-blue-100 text-left text-sm font-mono">
       <div className="h-full overflow-auto p-4">

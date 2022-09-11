@@ -7,7 +7,12 @@ export const editorOpenState = atom({
 
 export const parseRecursiveState = atom({
   key: 'parseRecursiveState',
-  default: false,
+  default: true,
+})
+
+export const jsonCollapsedState = atom({
+  key: 'jsonCollapsedState',
+  default: true,
 })
 
 export const editorTextState = atom({

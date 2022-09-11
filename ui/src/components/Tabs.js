@@ -1,5 +1,5 @@
 import { Tab } from '@headlessui/react'
-import { CodeIcon, EyeIcon, QuestionMarkCircleIcon } from '@heroicons/react/solid'
+import { CodeBracketSquareIcon, EyeIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
 import { classNames } from '../utils/common'
 import JsonParser from './JsonParser'
 
@@ -7,7 +7,7 @@ const tabList = [
   {
     name: 'JSON Parser',
     title: <div className="w-full">
-      <CodeIcon className="h-4 w-4 inline" aria-hidden="true"/>
+      <CodeBracketSquareIcon className="h-4 w-4 inline" aria-hidden="true"/>
       <span className="ml-2">JSON Parser</span>
     </div>,
     component: <JsonParser></JsonParser>
