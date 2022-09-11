@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 
 export const editorOpenState = atom({
-  key: 'editorOpenState',
+  key: 'parserEditorOpenState',
   default: false,
 })
 
@@ -11,16 +11,16 @@ export const parseRecursiveState = atom({
 })
 
 export const jsonCollapsedState = atom({
-  key: 'jsonCollapsedState',
+  key: 'parserJsonCollapsedState',
   default: true,
 })
 
 export const editorTextState = atom({
-  key: 'editorTextState',
+  key: 'parserEditorTextState',
   default: '',
 })
 
 export const jsonTextState = atom({
-  key: 'jsonTextState',
+  key: 'parserJsonTextState',
   default: '',
 })
