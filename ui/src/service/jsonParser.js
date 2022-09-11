@@ -2,31 +2,9 @@
 
 /* global mljParseOnce */
 
-function isObject (val) {
-  return typeof val === 'object' &&
-    !Array.isArray(val) &&
-    val !== null
-}
+import { warpVal } from '../utils/common'
 
-function warpVal (val) {
-  if (isObject(val)) {
-    return val
-  } else if (val === null) {
-    return { 'Null': val }
-  } else if (typeof val === 'undefined') {
-    return { 'Undefined': val }
-  } else if (typeof val === 'string') {
-    return { 'String': val }
-  } else if (typeof val === 'number') {
-    return { 'Number': val }
-  } else if (typeof val === 'boolean') {
-    return { 'Boolean': val }
-  } else if (Array.isArray(val)) {
-    return { 'Array': val }
-  }
-}
-
-function fallbackParse (setRst, text) {
+function fallbackParse (text) {
   let ret
   try {
     ret = JSON.parse(text)
@@ -34,32 +12,29 @@ function fallbackParse (setRst, text) {
     console.warn(e)
     ret = text
   }
-  ret = warpVal(ret)
-  setRst(ret)
+  return ret
 }
 
-export const parseJson = function (setRst, text, recursive) {
-  if (recursive) {
-    if (typeof mljRecursiveParse === 'function') {
+export const parseJson = (text, recursive) => {
+  return new Promise((resolve, reject) => {
+    if (typeof mljRecursiveParse !== 'function' || typeof mljParseOnce !== 'function') {
+      console.warn('parseJson fallback js method')
+      let ret = fallbackParse(text)
+      resolve(warpVal(ret))
+    } else if (recursive) {
       mljRecursiveParse(text).then(ret => {
-        setRst(warpVal(ret))
+        resolve(warpVal(ret))
       }).catch(e => {
-        console.error(e)
+        console.warn(e)
+        resolve(warpVal(text))
       })
     } else {
-      console.warn('mljRecursiveParse fallback js method')
-      fallbackParse(setRst, text)
-    }
-  } else {
-    if (typeof mljParseOnce === 'function') {
       mljParseOnce(text).then(ret => {
-        setRst(warpVal(ret))
+        resolve(warpVal(ret))
       }).catch(e => {
-        console.error(e)
+        console.warn(e)
+        resolve(warpVal(text))
       })
-    } else {
-      console.warn('mljParseOnce fallback js method')
-      fallbackParse(setRst, text)
     }
-  }
+  })
 }

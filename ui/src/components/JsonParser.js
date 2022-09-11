@@ -1,18 +1,27 @@
 import { Dialog, Switch, Transition } from '@headlessui/react'
 import ReactJson from 'react-json-view'
-import { Fragment, useEffect, useState } from 'react'
-import { parseJson } from '../service/jsonParser'
+import { Fragment, Suspense } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { editorOpenState, editorTextState, jsonTextState, parseRecursiveState } from '../state/atom'
+import { jsonObjectSelector } from '../state/selector'
 
-export default function JsonParser (props) {
-  const [isEditorOpen, setIsEditorOpen] = useState(false)
-  const [enableRecursive, setEnableRecursive] = useState(false)
-  const [editorText, setEditorText] = useState('')
-  const [jsonText, setJsonText] = useState('')
-  const [jsonObject, setJsonObject] = useState({})
-
+function JsonViewer () {
   const style = {
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
   }
+  const jsonObject = useRecoilValue(jsonObjectSelector)
+
+  return (
+    <ReactJson src={jsonObject} style={style} collapsed={1} indentWidth={2} collapseStringsAfterLength={32}
+               quotesOnKeys={false} displayDataTypes={false}/>
+  )
+}
+
+export default function JsonParser (props) {
+  const [isEditorOpen, setIsEditorOpen] = useRecoilState(editorOpenState)
+  const [parseRecursive, setParseRecursive] = useRecoilState(parseRecursiveState)
+  const [editorText, setEditorText] = useRecoilState(editorTextState)
+  const [jsonText, setJsonText] = useRecoilState(jsonTextState)
 
   function closeEditor () {
     setEditorText(jsonText)
@@ -29,10 +38,6 @@ export default function JsonParser (props) {
     setIsEditorOpen(true)
   }
 
-  useEffect(() => {
-    parseJson(setJsonObject, jsonText, enableRecursive)
-  }, [jsonText, enableRecursive])
-
   return (<div className="flex-1 flex flex-col overflow-hidden">
     <div className="flex p-2 justify-start">
       <button
@@ -42,16 +47,15 @@ export default function JsonParser (props) {
       >
         Edit JSON
       </button>
-
       <Switch.Group>
         <div className="flex items-center mx-3">
           <Switch
-            checked={enableRecursive}
-            onChange={setEnableRecursive}
-            className={`${enableRecursive ? 'bg-emerald-500' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+            checked={parseRecursive}
+            onChange={setParseRecursive}
+            className={`${parseRecursive ? 'bg-emerald-500' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
           >
                           <span
-                            className={`${enableRecursive ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                            className={`${parseRecursive ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                           />
           </Switch>
           <Switch.Label className="ml-3">Parse all strings</Switch.Label>
@@ -60,8 +64,9 @@ export default function JsonParser (props) {
     </div>
     <div className="flex-1 overflow-hidden rounded-xl m-2 p-0 bg-blue-100 text-left text-sm font-mono">
       <div className="h-full overflow-auto p-4">
-        <ReactJson src={jsonObject} style={style} collapsed={1} indentWidth={2} collapseStringsAfterLength={32}
-                   quotesOnKeys={false} displayDataTypes={false}/>
+        <Suspense fallback={<div>Loading...</div>}>
+          <JsonViewer></JsonViewer>
+        </Suspense>
       </div>
     </div>
     <Transition appear show={isEditorOpen} as={Fragment}>

@@ -26,7 +26,7 @@ const tabList = [
       <QuestionMarkCircleIcon className="h-4 w-4 inline" aria-hidden="true"/>
       <span className="ml-2">Help</span>
     </div>,
-    component: <div>If you have any questions, please contact wangweichen.walt</div>
+    component: <div>If you have any questions, please contact walt</div>
   }
 ]
 
