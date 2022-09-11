@@ -3,5 +3,13 @@
 }
 
 .jsoneditor-poweredBy {
-   display: none;
+    display: none;
+}
+
+.jsoneditor-search {
+    right: 4px !important;
+}
+
+.jsoneditor-frame {
+    border-radius: 0.5rem;
 }

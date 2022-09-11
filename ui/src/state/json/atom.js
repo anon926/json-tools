@@ -10,17 +10,12 @@ export const parseRecursiveState = atom({
   default: true,
 })
 
-export const jsonCollapsedState = atom({
-  key: 'parserJsonCollapsedState',
-  default: true,
-})
-
 export const editorTextState = atom({
   key: 'parserEditorTextState',
-  default: '',
+  default: {},
 })
 
 export const jsonTextState = atom({
   key: 'parserJsonTextState',
-  default: '',
+  default: {},
 })

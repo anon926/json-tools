@@ -8,6 +8,7 @@ import { Fragment } from 'react'
 export const Editor = function (props) {
   return (<Fragment>
     <JsonEditor
+      htmlElementProps={{className:"overflow-hidden"}}
       theme="ace/theme/github"
       statusBar={false}
       search={true}
@@ -22,6 +23,7 @@ export const Editor = function (props) {
 export const Viewer = function (props) {
   return (<Fragment>
     <JsonEditor
+      htmlElementProps={{className:"overflow-hidden"}}
       statusBar={false}
       search={true}
       mode={'view'}
