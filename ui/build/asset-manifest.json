@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/ui/build/static/css/main.d0462344.css",
-    "main.js": "/ui/build/static/js/main.ee741f99.js",
+    "main.css": "/ui/build/static/css/main.a5d30ea0.css",
+    "main.js": "/ui/build/static/js/main.1b451b85.js",
     "static/js/787.21b0c611.chunk.js": "/ui/build/static/js/787.21b0c611.chunk.js",
+    "static/media/jsoneditor-icons.svg": "/ui/build/static/media/jsoneditor-icons.15f2789dd231f36d43a4.svg",
     "index.html": "/ui/build/index.html",
-    "main.d0462344.css.map": "/ui/build/static/css/main.d0462344.css.map",
-    "main.ee741f99.js.map": "/ui/build/static/js/main.ee741f99.js.map",
+    "main.a5d30ea0.css.map": "/ui/build/static/css/main.a5d30ea0.css.map",
+    "main.1b451b85.js.map": "/ui/build/static/js/main.1b451b85.js.map",
     "787.21b0c611.chunk.js.map": "/ui/build/static/js/787.21b0c611.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d0462344.css",
-    "static/js/main.ee741f99.js"
+    "static/css/main.a5d30ea0.css",
+    "static/js/main.1b451b85.js"
   ]
 }

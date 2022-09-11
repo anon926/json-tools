@@ -2,8 +2,8 @@ import { Dialog, Switch, Transition } from '@headlessui/react'
 import ReactJson from 'react-json-view'
 import { Fragment, Suspense } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { editorOpenState, editorTextState, jsonCollapsedState, jsonTextState, parseRecursiveState } from '../state/atom'
-import { jsonObjectSelector } from '../state/selector'
+import { editorOpenState, editorTextState, jsonCollapsedState, jsonTextState, parseRecursiveState } from '../state/json/atom'
+import { jsonObjectSelector } from '../state/json/selector'
 
 function JsonViewer () {
   const style = {
