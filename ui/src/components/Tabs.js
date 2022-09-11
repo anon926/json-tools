@@ -1,7 +1,9 @@
 import { Tab } from '@headlessui/react'
-import { CodeBracketSquareIcon, EyeIcon, QuestionMarkCircleIcon } from '@heroicons/react/20/solid'
+import { CodeBracketSquareIcon, CogIcon, EyeIcon } from '@heroicons/react/20/solid'
 import { classNames } from '../utils/common'
 import JsonParser from './JsonParser'
+import Settings from './Settings'
+import DagViewer from './DagViewer'
 
 const tabList = [
   {
@@ -18,15 +20,15 @@ const tabList = [
       <EyeIcon className="h-4 w-4 inline" aria-hidden="true"/>
       <span className="ml-2">Dag Viewer</span>
     </div>,
-    component: <div>Dag Viewer</div>
+    component: <DagViewer></DagViewer>
   },
   {
-    name: 'Help',
+    name: 'Settings',
     title: <div className="w-full">
-      <QuestionMarkCircleIcon className="h-4 w-4 inline" aria-hidden="true"/>
-      <span className="ml-2">Help</span>
+      <CogIcon className="h-4 w-4 inline" aria-hidden="true"/>
+      <span className="ml-2">Settings</span>
     </div>,
-    component: <div>If you have any questions, please contact walt</div>
+    component: <Settings></Settings>
   }
 ]
 
