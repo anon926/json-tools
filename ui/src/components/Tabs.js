@@ -44,10 +44,10 @@ export default function Tabs () {
             {t.title}
           </Tab>))}
         </Tab.List>
-        <Tab.Panels className="mt-3 flex-1 flex flex-col overflow-hidden">
+        <Tab.Panels className="mt-2 flex-1 flex flex-col overflow-hidden">
           {tabList.map((t, idx) => (<Tab.Panel
             key={idx}
-            className={classNames('rounded-xl bg-white p-3 flex-1 flex flex-col overflow-hidden', 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2')}
+            className={classNames('rounded-xl bg-white p-1 flex-1 flex flex-col overflow-hidden', 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2')}
           >
             {t.component}
           </Tab.Panel>))}
