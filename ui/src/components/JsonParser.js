@@ -1,19 +1,27 @@
-import { Fragment, Suspense } from 'react'
+import { Fragment, Suspense, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { Switch } from '@headlessui/react'
 import { editorOpenState, editorTextState, jsonTextState, parseRecursiveState } from '../state/json/atom'
 import { jsonObjectSelector } from '../state/json/selector'
 import { Editor, Viewer } from './JsonEditor'
 
-function RecursiveSwitch () {
+function RecursiveSwitch (props) {
   const [parseRecursive, setParseRecursive] = useRecoilState(parseRecursiveState)
+
+  const switchChange = (x) => {
+    if (parseRecursive !== x) {
+      props.onProcess()
+    }
+    setParseRecursive(x)
+  }
+
   return (
     <Switch.Group>
       <div className="flex items-center mx-3">
         <Switch.Label className="mr-3">Parse string</Switch.Label>
         <Switch
           checked={parseRecursive}
-          onChange={setParseRecursive}
+          onChange={switchChange}
           className={`${parseRecursive ? 'bg-emerald-500' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
         >
           <span
@@ -76,33 +84,38 @@ function EditorSwitch () {
   }
 }
 
-function JsonViewer () {
+function JsonViewer (props) {
   const [isEditorOpen] = useRecoilState(editorOpenState)
   const [editorText, setEditorText] = useRecoilState(editorTextState)
   const jsonObject = useRecoilValue(jsonObjectSelector)
 
   if (isEditorOpen) {
-    return (
-      <Editor value={editorText} onChange={setEditorText}></Editor>
-    )
+    return (<Editor value={editorText} onChange={setEditorText} id="json_parser_editor"
+                    placeholder="Please enter JSON string here"></Editor>)
+  } else if (props.processing) {
+    return (<div>processing...</div>)
   } else {
-    return (
-      <Viewer value={jsonObject}></Viewer>
-    )
+    return (<Viewer value={jsonObject}></Viewer>)
   }
 }
 
 export default function JsonParser () {
+  const [processing, setProcessing] = useState(false)
+  const onProcess = () => {
+    setProcessing(true)
+    setTimeout(() => {setProcessing(false)}, 5)
+  }
+
   return (<div className="flex-1 flex flex-col overflow-hidden">
     <div className="flex p-2 justify-start">
-      <RecursiveSwitch></RecursiveSwitch>
-      <div className="grow"></div>
+      <RecursiveSwitch onProcess={onProcess}></RecursiveSwitch>
+      <div className="grow">{JSON.stringify(processing)}</div>
       <EditorSwitch></EditorSwitch>
     </div>
     <div className="flex-1 overflow-hidden rounded-xl m-2 text-left text-sm font-mono">
       <div className="h-full grid grid-cols-1">
         <Suspense fallback={<div>Loading...</div>}>
-          <JsonViewer></JsonViewer>
+          <JsonViewer processing={processing}></JsonViewer>
         </Suspense>
       </div>
     </div>

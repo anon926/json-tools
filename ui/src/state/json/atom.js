@@ -12,10 +12,10 @@ export const parseRecursiveState = atom({
 
 export const editorTextState = atom({
   key: 'parserEditorTextState',
-  default: {},
+  default: "",
 })
 
 export const jsonTextState = atom({
   key: 'parserJsonTextState',
-  default: {},
+  default: "",
 })
