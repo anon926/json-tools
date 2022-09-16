@@ -15,6 +15,10 @@ function fallbackParse (text) {
   return ret
 }
 
+export const parseJsonSync = (text) => {
+  return warpVal(fallbackParse(text))
+}
+
 export const parseJson = (text, recursive) => {
   return new Promise((resolve, reject) => {
     if (typeof mljRecursiveParse !== 'function' || typeof mljParseOnce !== 'function') {
